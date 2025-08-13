@@ -10,7 +10,7 @@
     let style = (
         radius: .53,
         padding: .25,
-        arrow-scale: 3,
+        arrow-scale: 1,
     )
 
     // Drawing function
