@@ -3,7 +3,7 @@
 #import cetz.draw: anchor, circle, hide, line, mark, translate
 #import "/src/mini.typ": center-mark
 
-#let bjt(name, node, polarisation: "npn", envelope: false, ..params) = {
+#let bjt(name, node, polarisation: "npn", envelope: false, label: "", ..params) = {
     assert(polarisation in ("npn", "pnp"), message: "polarisation must `npn` or `pnp`")
     assert(type(envelope) == bool, message: "envelope must be of type bool")
     assert(params.pos().len() == 0, message: "ground supports only one node")
@@ -39,9 +39,15 @@
         line((to: "base", rel: (0, -style.base-distance * sgn)), "e", ..style.at("wires"), mark: center-mark(symbol: if sgn == -1 { "<" } else { ">" }))
         line((to: "base", rel: (0, style.base-distance * sgn)), "c", ..style.at("wires"))
     }
+    
+    let label = if type(label) == dictionary {
+        (content: label.at("content", default: ""), anchor: label.at("anchor", default: "east"), distance: label.at("distance", default: 0pt))
+    } else {
+        (content: label, anchor: "east", distance: 0pt)
+    }
 
     // Componant call
-    component("bjt", name, node, draw: draw, style: style, ..params, label: none)
+    component("bjt", name, node, draw: draw, style: style, label: label, ..params)
 }
 
 #let pnp(name, node, ..params) = bjt(name, node, polarisation: "pnp", ..params)
